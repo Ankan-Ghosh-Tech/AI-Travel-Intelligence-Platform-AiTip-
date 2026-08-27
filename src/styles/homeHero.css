@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+@import url('https://unpkg.com/lenis@1.1.18/dist/lenis.css');
+
+:root {
+  --bg-dark: #070709;
+  --bg-surface: #0e0e12;
+  --text-main: #f4f4f6;
+  --text-muted: #8e8e9c;
+  --accent-gold: #e2c08d;
+
+  --font-display: 'Syne', -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+}
+
+html, body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.text-gradient-hero {
+  background: linear-gradient(135deg, #ffffff 30%, rgba(255, 255, 255, 0.65) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes wheelBounce {
+  0% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, 8px);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.animate-wheel-bounce {
+  animation: wheelBounce 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+#mask-text-group {
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+#mask-text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 180px;
+  letter-spacing: 0.06em;
+  fill: black;
+}
+
+@media (max-width: 768px) {
+  #mask-text {
+    font-size: 120px;
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-container {
+    height: auto !important;
+  }
+
+  .svg-mask-wrapper {
+    display: none;
+  }
+
+  .revealed-hero-text {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    opacity: 1 !important;
+    filter: none !important;
+    padding: 4rem 1rem;
+  }
+
+  .hero-content {
+    position: relative !important;
+    height: auto !important;
+  }
+}

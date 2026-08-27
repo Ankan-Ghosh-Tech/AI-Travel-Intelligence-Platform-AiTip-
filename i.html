@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TravelAI — Premium Dashboard</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #020617;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+
+        /* Glassmorphism base */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .glass-light {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Glow orbs */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            animation: floatOrb 12s ease-in-out infinite alternate;
+        }
+
+        .glow-orb--indigo {
+            width: 500px;
+            height: 500px;
+            background: rgba(99, 102, 241, 0.15);
+            top: -120px;
+            left: -120px;
+        }
+
+        .glow-orb--cyan {
+            width: 400px;
+            height: 400px;
+            background: rgba(34, 211, 238, 0.10);
+            bottom: -80px;
+            right: -80px;
+            animation-delay: 4s;
+        }
+
+        .glow-orb--purple {
+            width: 300px;
+            height: 300px;
+            background: rgba(168, 85, 247, 0.10);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 8s;
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -40px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 30px) scale(0.9);
+            }
+            100% {
+                transform: translate(10px, -10px) scale(1.05);
+            }
+        }
+
+        /* Nav item */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            color: #fff;
+            background: rgba(99, 102, 241, 0.12);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 24px;
+            border-radius: 0 4px 4px 0;
+            background: linear-gradient(180deg, #818cf8, #22d3ee);
+        }
+
+        .nav-item i {
+            width: 20px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        /* Status badge */
+        .badge {
+            padding: 4px 14px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .badge--emerald {
+            background: rgba(52, 211, 153, 0.12);
+            color: #34d399;
+        }
+        .badge--amber {
+            background: rgba(251, 191, 36, 0.12);
+            color: #fbbf24;
+        }
+        .badge--sky {
+            background: rgba(56, 189, 248, 0.12);
+            color: #38bdf8;
+        }
+        .badge--indigo {
+            background: rgba(99, 102, 241, 0.12);
+            color: #818cf8;
+        }
+
+        /* Chat message animations */
+        .message-enter {
+            animation: messageSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(16px) scale(0.98);
+        }
+
+        @keyframes messageSlide {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .message-enter:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+        .message-enter:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+        .message-enter:nth-child(3) {
+            animation-delay: 0.25s;
+        }
+
+        /* Typing cursor */
+        .typing-cursor::after {
+            content: '▍';
+            display: inline-block;
+            animation: blink 1s step-end infinite;
+            color: #818cf8;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Floating dock */
+        .dock {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 80px -12px rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .dock-btn {
+            padding: 10px 18px;
+            border-radius: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.25s ease;
+            font-weight: 500;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+
+        .dock-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateY(-1px);
+        }
+
+        .dock-btn.primary {
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+        }
+
+        .dock-btn.primary:hover {
+            background: rgba(99, 102, 241, 0.35);
+            color: #a5b4fc;
+        }
+
+        /* Input */
+        .chat-input {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 4px 4px 4px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus-within {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.06);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .chat-input input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 0.95rem;
+            padding: 14px 0;
+        }
+
+        .chat-input input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+            font-weight: 400;
+        }
+
+        .chat-input button {
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            border: none;
+            border-radius: 14px;
+            padding: 12px 24px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px -6px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Right panel items */
+        .status-item {
+            padding: 16px 18px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 500;
+        }
+
+        .status-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
+            transform: translateX(2px);
+        }
+
+        .status-item .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* Flight card */
+        .flight-path {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .flight-path::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 15%;
+            right: 15%;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.2), rgba(34, 211, 238, 0.2));
+            transform: translateY(-50%);
+        }
+
+        .flight-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #818cf8;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .flight-dot--cyan {
+            background: #22d3ee;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 1280px) {
+            .right-panel {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+            }
+            .sidebar .logo-text,
+            .sidebar .nav-label {
+                display: none;
+            }
+            .sidebar .nav-item {
+                justify-content: center;
+                padding: 14px;
+            }
+            .sidebar .nav-item i {
+                font-size: 1.3rem;
+                margin: 0;
+            }
+            .sidebar .nav-item.active::before {
+                display: none;
+            }
+            .sidebar .nav-item.active {
+                background: rgba(99, 102, 241, 0.15);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .right-panel {
+                display: none;
+            }
+            .hero h1 {
+                font-size: 2.2rem !important;
+            }
+            .dock {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 6px 10px !important;
+                bottom: 16px !important;
+                border-radius: 20px !important;
+                max-width: 95%;
+            }
+            .dock-btn {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+            .dock-btn span {
+                display: none;
+            }
+            .chat-input {
+                flex-wrap: wrap;
+                padding: 8px 12px;
+            }
+            .chat-input input {
+                width: 100%;
+                padding: 10px 0;
+            }
+            .chat-input button {
+                width: 100%;
+                justify-content: center;
+                padding: 12px;
+            }
+            .main-content {
+                padding: 16px !important;
+            }
+            .chat-area {
+                padding: 16px !important;
+            }
+            .flight-card {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .flight-card .flight-path {
+                width: 100%;
+            }
+            .flight-card .flight-path::before {
+                left: 10%;
+                right: 10%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem !important;
+            }
+            .badge {
+                font-size: 0.6rem;
+                padding: 3px 10px;
+            }
+            .glass-card {
+                padding: 16px !important;
+            }
+            .status-item {
+                padding: 12px 14px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Loading shimmer */
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.02) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* Hover lift */
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Weather widget */
+        .weather-icon {
+            font-size: 2.4rem;
+            line-height: 1;
+        }
+
+        /* Scrollable chat */
+        .chat-scroll {
+            scroll-behavior: smooth;
+        }
+
+        .chat-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.25);
+            border-radius: 20px;
+        }
+
+        /* Premium divider */
+        .premium-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+        }
+
+        /* Destination hero image placeholder */
+        .hero-image-placeholder {
+            background: radial-gradient(ellipse at 30% 40%, rgba(99, 102, 241, 0.08), transparent 70%),
+                radial-gradient(ellipse at 70% 60%, rgba(34, 211, 238, 0.06), transparent 60%);
+        }
+
+        /* Interactive card click feedback */
+        .card-interactive {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .card-interactive:active {
+            transform: scale(0.98);
+        }
+
+        /* Premium badge pulse */
+        .badge-pulse {
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Sidebar logo mark */
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #fff;
+            box-shadow: 0 8px 24px -6px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Glow Orbs -->
+    <div class="glow-orb glow-orb--indigo"></div>
+    <div class="glow-orb glow-orb--cyan"></div>
+    <div class="glow-orb glow-orb--purple"></div>
+
+    <!-- ====== LAYOUT ====== -->
+    <div class="flex h-screen relative z-10">
+
+        <!-- ====== LEFT SIDEBAR ====== -->
+        <aside class="sidebar w-72 flex-shrink-0 border-r border-slate-800/60 bg-slate-950/40 backdrop-blur-2xl flex flex-col h-full overflow-y-auto">
+            <!-- Logo -->
+            <div class="p-6 flex items-center gap-3">
+                <div class="logo-mark">T</div>
+                <span class="logo-text text-xl font-bold text-white tracking-tight">TravelAI</span>
+                <span class="logo-text ml-auto text-[10px] font-medium text-indigo-400/60 bg-indigo-500/10 px-2 py-0.5 rounded-full">v2.0</span>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="px-3 flex-1 space-y-0.5 mt-2">
+                <a class="nav-item active">
+                    <i class="fas fa-compass"></i>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                <a class="nav-item">
+                    <i class="fas fa-suitcase"></i>
+                    <span class="nav-label">My Trips</span>
+                    <span class="nav-label ml-auto text-[10px] bg-indigo-500/15 text-indigo-400 px-2 py-0.5 rounded-full">3</span>
+                </a>
+                <a class="nav-item">
+                    <i class="fas fa-coins"></i>
+                    <span class="nav-label">Budget Planner</span>
+                </a>
+                <a class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="nav-label">Documents</span>
+                </a>
+                <a class="nav-item">
+                    <i class="fas fa-bookmark"></i>
+                    <span class="nav-label">Saved Places</span>
+                </a>
+                <a class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-label">Settings</span>
+                </a>
+            </nav>
+
+            <!-- Bottom: User -->
+            <div class="p-4 border-t border-slate-800/40 mt-auto">
+                <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-pointer">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-400 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/20">JD</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-white truncate">James Donovan</p>
+                        <p class="text-xs text-slate-400 truncate">james@travel.ai</p>
+                    </div>
+                    <i class="fas fa-ellipsis-v text-slate-500 text-sm"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ====== MAIN CONTENT ====== -->
+        <main class="flex-1 flex flex-col min-w-0 h-full">
+
+            <!-- Hero -->
+            <section class="main-content p-6 md:p-8 border-b border-slate-800/40 flex-shrink-0 hero-image-placeholder relative overflow-hidden">
+                <!-- Subtle gradient overlay -->
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/5 via-transparent to-cyan-500/5 pointer-events-none"></div>
+
+                <div class="relative z-10">
+                    <div class="flex flex-wrap items-start justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-3 mb-1">
+                                <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight">Kyoto, Japan</h1>
+                                <span class="text-3xl">🇯🇵</span>
+                            </div>
+                            <p class="text-slate-400 text-sm md:text-base flex items-center gap-2">
+                                <i class="fas fa-calendar-alt text-indigo-400/60"></i>
+                                October 12 – October 16
+                                <span class="text-slate-500 mx-1">•</span>
+                                <span class="text-slate-400">4 Nights</span>
+                                <span class="text-slate-500 mx-1">•</span>
+                                <span class="text-slate-400"><i class="fas fa-user-group text-indigo-400/60 mr-1"></i> 2 Travelers</span>
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="badge badge--emerald flex items-center gap-1.5"><i class="fas fa-check-circle text-[10px]"></i> Flight Confirmed</span>
+                            <span class="badge badge--amber flex items-center gap-1.5"><i class="fas fa-check-circle text-[10px]"></i> Hotel Booked</span>
+                            <span class="badge badge--sky flex items-center gap-1.5"><i class="fas fa-sparkles text-[10px]"></i> 2 Attractions</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick stats row -->
+                    <div class="flex flex-wrap gap-6 mt-5 text-sm">
+                        <div class="flex items-center gap-2 text-slate-400">
+                            <i class="fas fa-cloud-sun text-amber-400/60"></i>
+                            <span>24°C · Sunny</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-400">
+                            <i class="fas fa-clock text-indigo-400/60"></i>
+                            <span>JST · GMT+9</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-400">
+                            <i class="fas fa-wifi text-cyan-400/60"></i>
+                            <span>Free Wi-Fi</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Area -->
+            <section id="chat" class="chat-area flex-1 overflow-y-auto p-6 md:p-8 space-y-5 chat-scroll">
+
+                <!-- AI Welcome Message -->
+                <div class="message-enter flex gap-4">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-500/15 flex items-center justify-center flex-shrink-0 border border-indigo-500/10">
+                        <i class="fas fa-robot text-indigo-400 text-sm"></i>
+                    </div>
+                    <div class="glass-card max-w-2xl p-5 rounded-3xl">
+                        <p class="text-white/90 leading-relaxed">
+                            Welcome back, James. Your Kyoto itinerary is fully optimized. I've curated the best experiences based on your preferences.
+                        </p>
+                        <p class="text-slate-400 text-sm mt-2 flex items-center gap-2">
+                            <i class="fas fa-sparkles text-indigo-400/60 text-[10px]"></i>
+                            <span>AI-ready · 4 recommendations</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Flight Card -->
+                <div class="message-enter glass-card max-w-3xl p-6 rounded-3xl hover-lift card-interactive">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                                <i class="fas fa-plane text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-base">Flight Details</h3>
+                                <p class="text-slate-400 text-xs">United Airlines · UA 837</p>
+                            </div>
+                        </div>
+                        <span class="badge badge--emerald flex items-center gap-1.5"><i class="fas fa-check-circle text-[10px]"></i> Confirmed</span>
+                    </div>
+
+                    <div class="flight-path">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-white">SFO</p>
+                            <p class="text-slate-400 text-sm">08:30 AM</p>
+                            <p class="text-slate-500 text-xs">San Francisco</p>
+                        </div>
+                        <div class="flex flex-col items-center flex-1 px-4 relative">
+                            <div class="flex items-center gap-3 w-full justify-center">
+                                <div class="flight-dot"></div>
+                                <div class="flex-1 h-[1px] bg-gradient-to-r from-indigo-500/20 to-cyan-400/20"></div>
+                                <div class="flight-dot flight-dot--cyan"></div>
+                            </div>
+                            <p class="text-slate-500 text-xs mt-1.5 font-medium tracking-wide">11h 15m</p>
+                            <p class="text-slate-500 text-[10px]">Direct</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-white">KIX</p>
+                            <p class="text-slate-400 text-sm">+1 Day</p>
+                            <p class="text-slate-500 text-xs">Osaka</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-slate-800/40 flex justify-between text-xs text-slate-400">
+                        <span><i class="fas fa-qrcode text-indigo-400/60 mr-1.5"></i> Boarding: Gate B7</span>
+                        <span><i class="fas fa-chair text-indigo-400/60 mr-1.5"></i> Seat 12A</span>
+                        <span><i class="fas fa-clock text-indigo-400/60 mr-1.5"></i> On-time</span>
+                    </div>
+                </div>
+
+                <!-- Hotel Card -->
+                <div class="message-enter glass-card max-w-3xl p-6 rounded-3xl hover-lift card-interactive">
+                    <div class="flex items-start gap-4">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 flex-shrink-0 flex items-center justify-center border border-white/5">
+                            <i class="fas fa-hotel text-2xl text-indigo-400/60"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="font-bold text-white">The Ritz-Carlton, Kyoto</h3>
+                                    <p class="text-slate-400 text-sm">Kamogawa River District</p>
+                                </div>
+                                <span class="badge badge--amber flex items-center gap-1.5"><i class="fas fa-star text-[10px]"></i> 4.9</span>
+                            </div>
+                            <div class="flex flex-wrap gap-4 mt-3 text-sm">
+                                <span class="text-slate-300"><i class="far fa-calendar-check text-indigo-400/60 mr-1.5"></i> Check-in: Oct 12, 3PM</span>
+                                <span class="text-slate-300"><i class="far fa-calendar-times text-indigo-400/60 mr-1.5"></i> Check-out: Oct 16, 11AM</span>
+                                <span class="text-slate-300"><i class="fas fa-wifi text-cyan-400/60 mr-1.5"></i> Free Wi-Fi</span>
+                                <span class="text-slate-300"><i class="fas fa-utensils text-amber-400/60 mr-1.5"></i> Breakfast incl.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Card -->
+                <div class="message-enter glass-card max-w-3xl p-6 rounded-3xl hover-lift card-interactive">
+                    <div class="flex items-start gap-4">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 flex-shrink-0 flex items-center justify-center border border-white/5">
+                            <i class="fas fa-utensils text-2xl text-amber-400/60"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="font-bold text-white">Kikunoi Honten</h3>
+                                    <p class="text-slate-400 text-sm">Kaiseki · Michelin Star</p>
+                                </div>
+                                <span class="badge badge--sky flex items-center gap-1.5"><i class="fas fa-clock text-[10px]"></i> 7:30 PM</span>
+                            </div>
+                            <div class="flex flex-wrap gap-4 mt-3 text-sm">
+                                <span class="text-slate-300"><i class="fas fa-map-pin text-amber-400/60 mr-1.5"></i> Gion District</span>
+                                <span class="text-slate-300"><i class="fas fa-star text-amber-400/60 mr-1.5"></i> 4.8 (342 reviews)</span>
+                                <span class="text-slate-300"><i class="fas fa-leaf text-emerald-400/60 mr-1.5"></i> Seasonal Menu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attractions Card -->
+                <div class="message-enter glass-card max-w-3xl p-6 rounded-3xl hover-lift card-interactive">
+                    <div class="flex items-start gap-4">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-rose-500/10 to-pink-500/10 flex-shrink-0 flex items-center justify-center border border-white/5">
+                            <i class="fas fa-torii-gate text-2xl text-rose-400/60"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="font-bold text-white">Fushimi Inari Shrine</h3>
+                                    <p class="text-slate-400 text-sm">Thousands of torii gates</p>
+                                </div>
+                                <span class="badge badge--indigo flex items-center gap-1.5"><i class="fas fa-clock text-[10px]"></i> 2h</span>
+                            </div>
+                            <div class="flex flex-wrap gap-4 mt-3 text-sm">
+                                <span class="text-slate-300"><i class="fas fa-map-pin text-rose-400/60 mr-1.5"></i> Southern Kyoto</span>
+                                <span class="text-slate-300"><i class="fas fa-sun text-amber-400/60 mr-1.5"></i> Best at sunrise</span>
+                                <span class="text-slate-300"><i class="fas fa-shoe-prints text-indigo-400/60 mr-1.5"></i> 2.5 km hike</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Suggestion -->
+                <div class="message-enter flex gap-4 mt-2">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-500/15 flex items-center justify-center flex-shrink-0 border border-indigo-500/10">
+                        <i class="fas fa-robot text-indigo-400 text-sm"></i>
+                    </div>
+                    <div class="glass-card max-w-2xl p-5 rounded-3xl">
+                        <p class="text-white/90 leading-relaxed">
+                            Based on your interests, I've added a <span class="text-indigo-400 font-medium">tea ceremony experience</span> and a <span class="text-cyan-400 font-medium">bamboo forest walk</span> to your itinerary. Would you like me to book them?
+                        </p>
+                        <div class="flex gap-3 mt-4">
+                            <button class="px-5 py-2.5 rounded-xl bg-indigo-500/15 text-indigo-400 text-sm font-medium hover:bg-indigo-500/25 transition-all border border-indigo-500/10">Yes, book both</button>
+                            <button class="px-5 py-2.5 rounded-xl bg-white/5 text-slate-400 text-sm font-medium hover:bg-white/10 transition-all">Show details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading skeleton (animated) -->
+                <div class="flex gap-4 opacity-60">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-500/10 flex-shrink-0 shimmer"></div>
+                    <div class="glass-card max-w-2xl p-5 rounded-3xl w-64">
+                        <div class="h-4 bg-white/5 rounded-full w-3/4 shimmer mb-3"></div>
+                        <div class="h-3 bg-white/5 rounded-full w-1/2 shimmer"></div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ====== INPUT BAR ====== -->
+            <footer class="p-4 md:p-6 border-t border-slate-800/40 flex-shrink-0 bg-slate-950/30 backdrop-blur-sm">
+                <div class="max-w-5xl mx-auto chat-input">
+                    <i class="fas fa-pen text-slate-500/40 text-sm"></i>
+                    <input type="text" placeholder="Ask anything about your trip…" />
+                    <button>
+                        <i class="fas fa-paper-plane mr-2"></i> Send
+                    </button>
+                </div>
+                <p class="text-center text-[10px] text-slate-500/50 mt-3 tracking-wide">
+                    <i class="fas fa-sparkles text-indigo-400/30 mr-1"></i>
+                    TravelAI uses your preferences to personalize every recommendation
+                </p>
+            </footer>
+
+        </main>
+
+        <!-- ====== RIGHT CONTEXT PANEL ====== -->
+        <aside class="right-panel w-80 flex-shrink-0 border-l border-slate-800/60 bg-slate-950/30 backdrop-blur-2xl p-5 overflow-y-auto hidden xl:block">
+
+            <!-- Trip Status -->
+            <div class="mb-7">
+                <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i class="fas fa-circle text-emerald-400 text-[8px]"></i>
+                    Trip Status
+                </h2>
+                <div class="space-y-2.5">
+                    <div class="status-item">
+                        <div class="icon bg-emerald-500/10 text-emerald-400">✈️</div>
+                        <div>
+                            <p class="text-white text-sm">Flight Confirmed</p>
+                            <p class="text-slate-400 text-xs">UA 837 · SFO → KIX</p>
+                        </div>
+                        <i class="fas fa-check-circle text-emerald-400/60 ml-auto text-sm"></i>
+                    </div>
+                    <div class="status-item">
+                        <div class="icon bg-amber-500/10 text-amber-400">🏨</div>
+                        <div>
+                            <p class="text-white text-sm">Hotel Booked</p>
+                            <p class="text-slate-400 text-xs">Ritz-Carlton · 4 nights</p>
+                        </div>
+                        <i class="fas fa-check-circle text-emerald-400/60 ml-auto text-sm"></i>
+                    </div>
+                    <div class="status-item">
+                        <div class="icon bg-sky-500/10 text-sky-400">💰</div>
+                        <div>
+                            <p class="text-white text-sm">Budget</p>
+                            <p class="text-slate-400 text-xs">$1,800 · $420 remaining</p>
+                        </div>
+                        <span class="text-emerald-400 text-xs font-medium">78%</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="icon bg-violet-500/10 text-violet-400">📍</div>
+                        <div>
+                            <p class="text-white text-sm">Saved Places</p>
+                            <p class="text-slate-400 text-xs">2 attractions · 3 restaurants</p>
+                        </div>
+                        <span class="text-indigo-400 text-xs font-medium">+4</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming -->
+            <div class="mb-7">
+                <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i class="fas fa-clock text-indigo-400/60 text-[10px]"></i>
+                    Up Next
+                </h2>
+                <div class="space-y-3">
+                    <div class="glass-card p-4 rounded-2xl">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0 text-amber-400">🍜</div>
+                            <div>
+                                <p class="text-white text-sm font-medium">Kikunoi Honten</p>
+                                <p class="text-slate-400 text-xs">Today · 7:30 PM</p>
+                                <p class="text-slate-500 text-[10px] mt-1">Kaiseki dinner</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl opacity-60">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center flex-shrink-0 text-rose-400">⛩️</div>
+                            <div>
+                                <p class="text-white text-sm font-medium">Fushimi Inari</p>
+                                <p class="text-slate-400 text-xs">Tomorrow · 6:00 AM</p>
+                                <p class="text-slate-500 text-[10px] mt-1">Sunrise hike</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather -->
+            <div class="mb-7">
+                <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i class="fas fa-cloud-sun text-amber-400/60 text-[10px]"></i>
+                    Weather
+                </h2>
+                <div class="glass-card p-5 rounded-2xl">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="weather-icon">⛅</span>
+                            <div>
+                                <p class="text-2xl font-bold text-white">24°C</p>
+                                <p class="text-slate-400 text-sm">Partly Cloudy</p>
+                            </div>
+                        </div>
+                        <div class="text-right text-xs text-slate-400">
+                            <p>Humidity: 62%</p>
+                            <p>Wind: 12 km/h</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-4 pt-4 border-t border-slate-800/40 text-xs text-slate-400">
+                        <span>Mon 22°</span>
+                        <span>Tue 25°</span>
+                        <span>Wed 23°</span>
+                        <span>Thu 21°</span>
+                        <span>Fri 24°</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div>
+                <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-simple text-indigo-400/60 text-[10px]"></i>
+                    Quick Stats
+                </h2>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div class="glass-card p-4 rounded-2xl text-center">
+                        <p class="text-2xl font-bold text-white">12</p>
+                        <p class="text-slate-400 text-xs">Activities</p>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl text-center">
+                        <p class="text-2xl font-bold text-white">4.9</p>
+                        <p class="text-slate-400 text-xs">Avg. Rating</p>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl text-center">
+                        <p class="text-2xl font-bold text-white">3</p>
+                        <p class="text-slate-400 text-xs">Cities</p>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl text-center">
+                        <p class="text-2xl font-bold text-white">8</p>
+                        <p class="text-slate-400 text-xs">Meals Planned</p>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <!-- ====== FLOATING DOCK ====== -->
+    <div class="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-50 w-auto">
+        <div class="dock flex gap-1 md:gap-2 p-1.5 md:p-2 rounded-2xl">
+            <button class="dock-btn" data-action="flight">
+                <i class="fas fa-plane text-indigo-400/70"></i>
+                <span>Flight</span>
+            </button>
+            <button class="dock-btn" data-action="hotel">
+                <i class="fas fa-hotel text-amber-400/70"></i>
+                <span>Hotel</span>
+            </button>
+            <button class="dock-btn" data-action="food">
+                <i class="fas fa-utensils text-emerald-400/70"></i>
+                <span>Food</span>
+            </button>
+            <button class="dock-btn" data-action="places">
+                <i class="fas fa-map-pin text-rose-400/70"></i>
+                <span>Places</span>
+            </button>
+            <button class="dock-btn primary" data-action="add">
+                <i class="fas fa-plus"></i>
+                <span>Add</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ====== JAVASCRIPT ====== -->
+    <script>
+        (function() {
+            // Dock button interactions with smooth scroll & feedback
+            const dockBtns = document.querySelectorAll('.dock-btn');
+            const chatContainer = document.getElementById('chat');
+
+            // Simple action feedback
+            dockBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const action = this.dataset.action;
+
+                    // Visual feedback
+                    this.style.transform = 'scale(0.94)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+
+                    // For "add" — show a quick toast-like feel (just a demo)
+                    if (action === 'add') {
+                        const input = document.querySelector('.chat-input input');
+                        if (input) {
+                            input.placeholder = 'What would you like to add? ✨';
+                            input.focus();
+                            setTimeout(() => {
+                                input.placeholder = 'Ask anything about your trip…';
+                            }, 3000);
+                        }
+                        return;
+                    }
+
+                    // Scroll to the first card of that type (demo)
+                    const cards = chatContainer.querySelectorAll('.glass-card');
+                    let targetCard = null;
+                    const actionMap = {
+                        flight: 'Flight',
+                        hotel: 'Hotel',
+                        food: 'Food',
+                        places: 'Attractions'
+                    };
+                    const label = actionMap[action] || '';
+                    if (label) {
+                        for (const card of cards) {
+                            const heading = card.querySelector('h3');
+                            if (heading && heading.textContent.includes(label)) {
+                                targetCard = card;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (targetCard) {
+                        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        targetCard.style.transition = 'all 0.3s ease';
+                        targetCard.style.boxShadow = '0 0 0 2px rgba(99,102,241,0.3), 0 20px 60px -12px rgba(0,0,0,0.6)';
+                        setTimeout(() => {
+                            targetCard.style.boxShadow = '';
+                        }, 1200);
+                    } else {
+                        // Fallback: scroll to top of chat
+                        chatContainer.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Input "Send" button
+            const sendBtn = document.querySelector('.chat-input button');
+            const inputField = document.querySelector('.chat-input input');
+
+            function handleSend() {
+                const text = inputField.value.trim();
+                if (!text) return;
+
+                // Add a user message (demo)
+                const userMsg = document.createElement('div');
+                userMsg.className = 'flex gap-4 justify-end message-enter';
+                userMsg.innerHTML = `
+              <div class="glass-card max-w-2xl p-5 rounded-3xl bg-indigo-500/5 border-indigo-500/10">
+                <p class="text-white/90">${text}</p>
+              </div>
+              <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 flex items-center justify-center flex-shrink-0 border border-indigo-500/10">
+                <i class="fas fa-user text-indigo-300 text-sm"></i>
+              </div>
+            `;
+                chatContainer.appendChild(userMsg);
+
+                // Clear input
+                inputField.value = '';
+
+                // Auto-scroll
+                setTimeout(() => {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
+
+                // Simulate AI response after a delay
+                setTimeout(() => {
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'flex gap-4 message-enter';
+                    aiMsg.innerHTML = `
+                <div class="w-10 h-10 rounded-2xl bg-indigo-500/15 flex items-center justify-center flex-shrink-0 border border-indigo-500/10">
+                  <i class="fas fa-robot text-indigo-400 text-sm"></i>
+                </div>
+                <div class="glass-card max-w-2xl p-5 rounded-3xl">
+                  <p class="text-white/90 leading-relaxed">
+                    Got it! I'm working on that for you. <span class="typing-cursor"></span>
+                  </p>
+                  <p class="text-slate-400 text-sm mt-2 flex items-center gap-2">
+                    <i class="fas fa-spinner fa-spin text-indigo-400/60 text-[10px]"></i>
+                    <span>Analyzing your request…</span>
+                  </p>
+                </div>
+              `;
+                    chatContainer.appendChild(aiMsg);
+
+                    // Scroll again
+                    setTimeout(() => {
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }, 100);
+
+                    // After a moment, replace with a more concrete response
+                    setTimeout(() => {
+                        const lastAi = chatContainer.querySelectorAll('.message-enter');
+                        const latest = lastAi[lastAi.length - 1];
+                        if (latest) {
+                            const p = latest.querySelector('p');
+                            if (p) {
+                                p.innerHTML =
+                                    `Great question! Based on your trip to Kyoto, I recommend visiting <span class="text-indigo-400 font-medium">Kinkaku-ji</span> (Golden Pavilion) and trying <span class="text-amber-400 font-medium">matcha ice cream</span> in the Gion district. Would you like me to add these to your itinerary?`;
+                            }
+                            const sub = latest.querySelector('.text-slate-400');
+                            if (sub) {
+                                sub.innerHTML =
+                                    `<i class="fas fa-check-circle text-emerald-400/60 text-[10px] mr-1.5"></i> Suggestion ready`;
+                            }
+                        }
+                    }, 2200);
+                }, 800);
+            }
+
+            sendBtn.addEventListener('click', handleSend);
+            inputField.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSend();
+                }
+            });
+
+            // Nav items active state
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    navItems.forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Demo: animate status items on hover
+            const statusItems = document.querySelectorAll('.status-item');
+            statusItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'rgba(99,102,241,0.2)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    this.style.borderColor = 'rgba(255,255,255,0.04)';
+                });
+            });
+
+            console.log('🚀 TravelAI Dashboard — Premium Edition');
+            console.log('✨ Designed with ❤️ for the future of travel planning.');
+        })();
+    </script>
+
+</body>
+</html>
